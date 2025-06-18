@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instagram Non-Followers Checker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: #f0f4f8;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      color: #333;
+    }
+    textarea {
+      width: 100%;
+      height: 150px;
+      margin-bottom: 20px;
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .output {
+      margin-top: 20px;
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <h2>🔍 Instagram Non-Followers Checker</h2>
+  <p><strong>Step 1:</strong> Open Instagram on Chrome. Go to your <em>Followers</em> or <em>Following</em> list, scroll fully, then paste the following code in <strong>Inspect > Console</strong>:</p>
+  <pre>
+let names = [...document.querySelectorAll('span._ap3a')].map(el => el.innerText);
+copy(names.join('\n'));
+  </pre>
+  <p>Then paste the copied data into the textboxes below:</p>
+
+  <label><strong>People You Follow (Following List):</strong></label>
+  <textarea id="following"></textarea>
+
+  <label><strong>People Who Follow You Back (Followers List):</strong></label>
+  <textarea id="followers"></textarea>
+
+  <button onclick="checkNonFollowers()">Find Who Doesn't Follow Back</button>
+
+  <div class="output" id="result"></div>
+
+  <script>
+    function checkNonFollowers() {
+      const following = document.getElementById('following').value.split('\n').map(n => n.trim()).filter(n => n);
+      const followers = new Set(document.getElementById('followers').value.split('\n').map(n => n.trim()));
+      const notFollowingBack = following.filter(name => !followers.has(name));
+
+      const resultDiv = document.getElementById('result');
+      if (notFollowingBack.length === 0) {
+        resultDiv.innerHTML = '<p>🎉 Everyone you follow is following you back!</p>';
+      } else {
+        resultDiv.innerHTML = '<h3>🚫 Not Following You Back:</h3><ul>' +
+          notFollowingBack.map(name => `<li>${name}</li>`).join('') + '</ul>';
+      }
+    }
+  </script>
+</body>
+</html>
